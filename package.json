@@ -10,11 +10,18 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^5.3.1",
+    "axios": "^1.7.5",
+    "formdata-node": "^6.0.3",
+    "formidable": "^3.5.1",
     "next": "14.2.5",
+    "node-fetch": "^3.3.2",
+    "openai": "^4.56.2",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "undici": "^6.19.8"
   },
   "devDependencies": {
+    "@types/formidable": "^3.4.5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
