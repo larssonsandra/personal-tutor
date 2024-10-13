@@ -25,6 +25,8 @@ export async function POST(req: Request) {
     const formDataToSend = new FormData();
     formDataToSend.append('file', new File([audioBuffer], 'audio.webm', { type: 'audio/webm' }));
     formDataToSend.append('model', 'whisper-1');
+    formDataToSend.append('language', 'sv');
+
 
     console.log('formDataToSend:', formDataToSend);
 
