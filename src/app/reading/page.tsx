@@ -1,5 +1,6 @@
 import SentencePronunciation from "@/app/components/SentencePronunciation";
 import ReadingAssistant from "@/app/components/ReadingAssistant";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const sentence = "Stina ska läsa och hon är bäst i det";
@@ -10,7 +11,8 @@ export default function Home() {
     <div>
       <h1>Läs och uttala</h1>
       <SentencePronunciation sentence={sentence} />;<hr />
-      <ReadingAssistant sentence={anotherSentence} />;
+      <ReadingAssistant sentence={anotherSentence} />
+      <Button>Hearing</Button>;<Button>Listening</Button>;
     </div>
   );
 }
