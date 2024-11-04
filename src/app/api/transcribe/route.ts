@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
 import { FormData } from 'formdata-node';
-import { fetch } from 'undici'; // Modern replacement for node-fetch
+import { fetch } from 'undici'; 
 
 export const config = {
   api: {
-    bodyParser: false, // Disable Next.js built-in body parsing to handle FormData
+    bodyParser: false, 
   },
 };
 

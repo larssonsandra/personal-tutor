@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import { Button } from "@/components/ui/button";
 
 interface ReadingAssistantProps {
   sentence: string;
@@ -10,6 +11,7 @@ const ReadingAssistant: React.FC<ReadingAssistantProps> = ({ sentence }) => {
   const [recognizedWords, setRecognizedWords] = useState<string[]>([]);
   const [hoveredWordIndex, setHoveredWordIndex] = useState<number | null>(null);
   const [tooltipVisible, setTooltipVisible] = useState(false);
+  const [isRecognitionStarted, setIsRecognitionStarted] = useState(false);
 
   // Function to normalize text by removing punctuation and converting to lowercase
   const normalizeText = (text: string) => {
@@ -25,6 +27,21 @@ const ReadingAssistant: React.FC<ReadingAssistantProps> = ({ sentence }) => {
   const finalTranscriptRef = useRef<string>("");
 
   useEffect(() => {
+    const checkMicrophonePermissions = async () => {
+      try {
+        await navigator.mediaDevices.getUserMedia({ audio: true });
+        console.log("Microphone access granted.");
+      } catch (error) {
+        console.error("Microphone access denied:", error);
+      }
+    };
+
+    if (!("webkitSpeechRecognition" in window)) {
+      console.error("Speech Recognition API is not supported in this browser.");
+      return; // Exit if not supported
+    }
+    checkMicrophonePermissions(); // Check for microphone permissions
+
     const recognition = new (window as any).webkitSpeechRecognition();
     recognition.continuous = true;
     recognition.interimResults = true;
@@ -33,16 +50,22 @@ const ReadingAssistant: React.FC<ReadingAssistantProps> = ({ sentence }) => {
     // State to hold the full transcript
     let finalTranscript = "";
 
+    recognition.onstart = () => {
+      console.log("Recognition started");
+    };
+
     recognition.onresult = (event: any) => {
       let interimTranscript = "";
+      console.log("event", event);
       for (let i = event.resultIndex; i < event.results.length; ++i) {
         if (event.results[i].isFinal) {
-          finalTranscript += event.results[i][0].transcript;
+          finalTranscript += event.results[i][0].transcript + "";
         } else {
           interimTranscript += event.results[i][0].transcript;
         }
       }
       const combinedTranscript = finalTranscript + " " + interimTranscript;
+      console.log("combinedTranscript", combinedTranscript);
       const words = normalizeText(combinedTranscript);
       setRecognizedWords(words);
     };
@@ -64,7 +87,7 @@ const ReadingAssistant: React.FC<ReadingAssistantProps> = ({ sentence }) => {
       recognition.onerror = null;
       recognition.stop();
     };
-  }, []);
+  }, [isRecognitionStarted]);
 
   // Function to detect if a word is correct based on position
   const isWordCorrect = (index: number) => {
@@ -72,21 +95,6 @@ const ReadingAssistant: React.FC<ReadingAssistantProps> = ({ sentence }) => {
       return null; // word has not been spoken yet
     }
     return recognizedWords[index] === targetWords[index];
-  };
-
-  // Function to handle mouse enter on a word
-  const handleMouseEnter = (index: number) => {
-    if (isWordCorrect(index) === false) {
-      setHoveredWordIndex(index);
-      setTooltipVisible(true);
-      playPronunciation(targetWords[index]);
-    }
-  };
-
-  // Function to handle mouse leave on a word
-  const handleMouseLeave = () => {
-    setHoveredWordIndex(null);
-    setTooltipVisible(false);
   };
 
   // Function to play pronunciation of a word
@@ -113,24 +121,42 @@ const ReadingAssistant: React.FC<ReadingAssistantProps> = ({ sentence }) => {
     window.speechSynthesis.speak(utterance);
   };
 
-  const handleWordClick = (index: number) => {
-    if (isWordCorrect(index) === false) {
-      setHoveredWordIndex(index);
-      setTooltipVisible(true);
-      playPronunciation(targetWords[index]);
-
-      setTimeout(() => {
-        setTooltipVisible(false);
-      }, 1000);
+  const stopPronunciation = () => {
+    if (recognitionRef.current) {
+      recognitionRef.current.stopping = true;
+      recognitionRef.current.stop();
     }
   };
 
+  const handleMouseEnter = (index: number) => {
+    setHoveredWordIndex(index);
+    setTooltipVisible(true);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredWordIndex(null);
+  };
+
+  const handlePronounceClick = (word: string) => {
+    playPronunciation(word); // Play pronunciation when "Höra" is clicked
+  };
+
+  const handleStartRecognition = () => {
+    setIsRecognitionStarted(true);
+  };
+
+  const handleEndReadingTutorial = () => {
+    setIsRecognitionStarted(false);
+  };
+
   return (
-    <div>
+    <div className="border-2 border-gray-200 p-6 rounded-lg">
       {targetWords.map((word, index) => (
         <span
+          className="relative"
           key={index}
-          onMouseEnter={() => handleMouseEnter(index)}
+          onMouseEnter={() => handleMouseEnter(index)} // Show tooltip on hover
+          onMouseLeave={handleMouseLeave} // Hide tooltip on mouse leave
           style={{
             backgroundColor:
               recognizedWords[index]?.toLowerCase() === word.toLowerCase()
@@ -143,23 +169,42 @@ const ReadingAssistant: React.FC<ReadingAssistantProps> = ({ sentence }) => {
           {word} {/*ToolTip*/}
           {tooltipVisible && hoveredWordIndex == index && (
             <div
+              className="flex flex-row justify-between"
               style={{
                 position: "absolute",
-                bottom: "100%",
+                bottom: "110%",
                 left: "0",
+                width: "80px",
+                height: "30px",
                 backgroundColor: "rgba(0,0,0,0.75)",
                 color: "white",
                 borderRadius: "3px",
                 whiteSpace: "nowrap",
                 transform: "translateX(-5px)",
                 zIndex: 1,
+                cursor: "pointer",
+                padding: "5px",
               }}
             >
-              Höra läst
+              <span onClick={() => handlePronounceClick(word)}>Höra</span>{" "}
+              {/* Play pronunciation */}
+              {/* Play pronunciation */}
+              <span>Läs</span>
             </div>
           )}
         </span>
       ))}
+
+      {/* Buttons for Start and Play */}
+      <div className="mt-4 flex flex-row gap-4">
+        <Button onClick={handleStartRecognition}>Start Reading Tutorial</Button>
+        <Button
+          onClick={handleEndReadingTutorial}
+          disabled={hoveredWordIndex === null}
+        >
+          End Reading Tutorial
+        </Button>
+      </div>
     </div>
   );
 };

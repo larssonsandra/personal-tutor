@@ -15,7 +15,7 @@ export function Header() {
   if (!user || !session) return null;
 
   return (
-    <header className="flex justify-between px-4 py-2">
+    <header className="flex justify-between px-4 py-2 bg-gray-200">
       <h1>Logo</h1>
       <div className="flex justify-between">
         <SignedIn>

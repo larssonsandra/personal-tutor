@@ -1,4 +1,6 @@
 import { ClerkProvider } from "@clerk/nextjs";
+import { headers } from "next/headers"; // Add this import
+
 import "./globals.css";
 import { Metadata } from "next";
 import localFont from "next/font/local";
@@ -23,13 +25,19 @@ const geistMono = localFont({
   variable: "--font-geist-mono",
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const cspHeader = (await headers()).get("Content-Security-Policy");
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+      <head>
+        {cspHeader && (
+          <meta httpEquiv="Content-Security-Policy" content={cspHeader} />
+        )}
+      </head>
       <ClerkProvider
         appearance={{
           variables: { colorPrimary: "#000000" },
@@ -48,9 +56,11 @@ export default function RootLayout({
         }}
       >
         <body className={`min-h-screen flex flex-col antialiased`}>
-          <Header />
-          {children}
-          <Footer />
+          <div className="flex flex-col min-h-screen">
+            <Header />
+            {children}
+            <Footer />
+          </div>
         </body>
       </ClerkProvider>
     </html>

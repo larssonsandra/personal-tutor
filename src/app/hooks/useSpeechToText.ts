@@ -1,4 +1,4 @@
-// useSpeechToText.ts
+// useSpeechToText.ts using Whisper API
 import { useState } from "react";
 
 const useSpeechToText = (onResult: (transcription: string) => void) => {
