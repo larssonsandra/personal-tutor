@@ -2,10 +2,7 @@
 
 // import SentencePronunciation from "@/app/components/SentencePronunciation";
 import ReadingAssistant from "@/app/components/ReadingAssistant";
-<<<<<<< HEAD
-=======
 import { useState } from "react";
->>>>>>> 63eddfc (fixed reading route)
 import { Button } from "@/components/ui/button";
 
 export default function Home() {
@@ -30,14 +27,6 @@ export default function Home() {
   };
 
   return (
-<<<<<<< HEAD
-    <div>
-      <h1>Läs och uttala</h1>
-      <SentencePronunciation sentence={sentence} />;<hr />
-      <ReadingAssistant sentence={anotherSentence} />
-      <Button>Hearing</Button>;<Button>Listening</Button>;
-    </div>
-=======
     <main className="flex-grow overflow-auto">
       <section className="flex flex-col w-6/12 mx-auto mt-10 px-10 py-10">
         <h2 className="text-lg font-bold mb-2">Läs och uttala</h2>
@@ -68,6 +57,5 @@ export default function Home() {
         <ReadingAssistant sentence={response || intitialText} />
       </section>
     </main>
->>>>>>> 63eddfc (fixed reading route)
   );
 }
