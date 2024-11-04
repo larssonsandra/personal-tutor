@@ -18,6 +18,7 @@ export function Header() {
     <header className="flex justify-between px-4 py-2 bg-gray-200">
       <h1>Logo</h1>
       <div className="flex justify-between">
+        {/* @ts-ignore */}
         <SignedIn>
           <SignOutButton>
             <button className="px-4 py-2 rounded-full bg-[#131316] text-white text-sm font-semibold">
@@ -26,6 +27,7 @@ export function Header() {
           </SignOutButton>
           <img src={user.imageUrl} className="size-10 rounded-full" />
         </SignedIn>
+        {/* @ts-ignore */}
         <SignedOut>
           <SignInButton>
             <button className="px-4 py-2 rounded-full bg-[#131316] text-white text-sm font-semibold">

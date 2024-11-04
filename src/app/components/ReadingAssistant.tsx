@@ -27,6 +27,10 @@ const ReadingAssistant: React.FC<ReadingAssistantProps> = ({ sentence }) => {
   const finalTranscriptRef = useRef<string>("");
 
   useEffect(() => {
+    console.log("targetWords", targetWords);
+    console.log("recognizedWords", recognizedWords);
+    console.log("isRecognitionStarted", isRecognitionStarted);
+
     const checkMicrophonePermissions = async () => {
       try {
         await navigator.mediaDevices.getUserMedia({ audio: true });
