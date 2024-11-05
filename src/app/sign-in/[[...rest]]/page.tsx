@@ -5,16 +5,20 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function SignInPage() {
-  const { isSignedIn } = useAuth(); // Hook to check if the user is signed in
+  const { isSignedIn } = useAuth();
+
   const router = useRouter();
 
   useEffect(() => {
     if (isSignedIn) {
-      console.log("IS SIGNED IN");
-      // Redirect to the dashboard if the user is signed in
+      // Redirect to the dashboard if the user is already signed in
       router.push("/dashboard");
     }
   }, [isSignedIn, router]);
 
-  return <SignIn path="/sign-in" routing="path" signUpUrl="/sign-up" />;
+  return (
+    <main className="flex h-screen items-center justify-center flex-grow overflow-auto">
+      <SignIn path="/sign-in" routing="path" signUpUrl="/sign-up" />
+    </main>
+  );
 }

@@ -201,12 +201,12 @@ const ReadingAssistant: React.FC<ReadingAssistantProps> = ({ sentence }) => {
 
       {/* Buttons for Start and Play */}
       <div className="mt-4 flex flex-row gap-4">
-        <Button onClick={handleStartRecognition}>Start Reading Tutorial</Button>
+        <Button onClick={handleStartRecognition}>Starta</Button>
         <Button
           onClick={handleEndReadingTutorial}
           disabled={hoveredWordIndex === null}
         >
-          End Reading Tutorial
+          Sluta
         </Button>
       </div>
     </div>

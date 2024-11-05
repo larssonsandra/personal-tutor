@@ -4,9 +4,8 @@ import { headers } from "next/headers"; // Add this import
 import "./globals.css";
 import { Metadata } from "next";
 import localFont from "next/font/local";
-import { Footer } from "@/app/components/Footer";
-import { Header } from "@/app/components/Header";
-import { Suspense } from "react";
+import { Header } from "./components/Header";
+import { Footer } from "./components/Footer";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://clerk-next-app.vercel.app/"),
