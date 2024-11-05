@@ -27,6 +27,8 @@ const ReadingAssistant: React.FC<ReadingAssistantProps> = ({ sentence }) => {
   const finalTranscriptRef = useRef<string>("");
 
   useEffect(() => {
+    if (!isRecognitionStarted) return; // Exit if recognition is not started
+
     console.log("targetWords", targetWords);
     console.log("recognizedWords", recognizedWords);
     console.log("isRecognitionStarted", isRecognitionStarted);
@@ -58,9 +60,10 @@ const ReadingAssistant: React.FC<ReadingAssistantProps> = ({ sentence }) => {
       console.log("Recognition started");
     };
 
+    console.log("utanför recognition.onresult");
     recognition.onresult = (event: any) => {
       let interimTranscript = "";
-      console.log("event", event);
+      console.log("innanför recognition.onresult");
       for (let i = event.resultIndex; i < event.results.length; ++i) {
         if (event.results[i].isFinal) {
           finalTranscript += event.results[i][0].transcript + "";
