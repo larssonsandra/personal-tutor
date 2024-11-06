@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["@clerk/nextjs"],
     "lib": [
       "dom",
       "dom.iterable",

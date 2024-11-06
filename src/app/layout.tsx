@@ -42,6 +42,7 @@ export default function RootLayout({
       {/* @ts-ignore */}
       <ClerkProvider
         dynamic
+        signInFallbackRedirectUrl="/dashboard"
         appearance={{
           variables: { colorPrimary: "#000000" },
           elements: {
